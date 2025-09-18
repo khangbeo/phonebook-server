@@ -122,7 +122,7 @@ app.put("/api/persons/:id", (req, res, next) => {
     .catch((e) => next(e));
 });
 
-app.post("/api/persons", (req, res) => {
+app.post("/api/persons", (req, res, next) => {
   const { name, number } = req.body;
   console.log(req);
   if (!name) {
@@ -138,9 +138,12 @@ app.post("/api/persons", (req, res) => {
   }
 
   const person = new Person({ name: name, number: number });
-  person.save().then((savedPerson) => {
-    res.json(savedPerson);
-  });
+  person
+    .save()
+    .then((savedPerson) => {
+      res.json(savedPerson);
+    })
+    .catch((e) => next(e));
   // const foundPerson = persons.find((p) => p.name === name);
 
   // if (foundPerson) {
